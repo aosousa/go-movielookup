@@ -23,14 +23,25 @@ func main() {
 		return
 	}
 
-	// get user's requested command (-m, -s, -h)
+	// get user's requested command
+	// -m or -movie: Search for a movie
+	// -s or -show: Search for a TV show
+	// -h or -help: Print list of accepted commands
 	cmd := args[1]
 
 	switch cmd {
-	case "-m":
+	case "-m", "-movie":
 		cmdArgs := buildString(args[2:])
 		mov := performRequest(cmdArgs)
 		mov.PrintMovie()
+	case "-s", "-show":
+		fmt.Println("searching for show")
+	case "-h", "-help":
+		fmt.Println("Available commands:")
+		fmt.Println("* -h | -help: Prints the list of available commands")
+		fmt.Println("* -m | -movie `movie title`: Search for a movie (e.g. go-movie-lookup -m Avengers)")
+		fmt.Println("* -s | -show `show title`: Search for a TV show (e.g. go-movie-lookup -s Game of Thrones)")
+		fmt.Println("You can also search for a TV show season (e.g. go-movie-lookup -s Game of Thrones S3) or a TV show episode (e.g. go-movie-lookup -s Game of Thrones S3E5)")
 	}
 }
 
