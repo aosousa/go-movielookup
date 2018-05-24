@@ -19,7 +19,7 @@ func main() {
 	// since os.Args[0] returns the name of the file being executed (in this case, go-movie-lookup.exe)
 	args := os.Args
 	if len(args) == 1 {
-		fmt.Println("help")
+		printHelp()
 		return
 	}
 
@@ -32,16 +32,14 @@ func main() {
 	switch cmd {
 	case "-m", "-movie":
 		cmdArgs := buildString(args[2:])
-		mov := performRequest(cmdArgs)
+		mov := findMovie(cmdArgs)
 		mov.PrintMovie()
 	case "-s", "-show":
-		fmt.Println("searching for show")
+		cmdArgs := buildString(args[2:])
+		show := findShow(cmdArgs)
+		show.PrintShow()
 	case "-h", "-help":
-		fmt.Println("Available commands:")
-		fmt.Println("* -h | -help: Prints the list of available commands")
-		fmt.Println("* -m | -movie `movie title`: Search for a movie (e.g. go-movie-lookup -m Avengers)")
-		fmt.Println("* -s | -show `show title`: Search for a TV show (e.g. go-movie-lookup -s Game of Thrones)")
-		fmt.Println("You can also search for a TV show season (e.g. go-movie-lookup -s Game of Thrones S3) or a TV show episode (e.g. go-movie-lookup -s Game of Thrones S3E5)")
+		printHelp()
 	}
 }
 
@@ -60,7 +58,8 @@ func buildString(args []string) string {
 	return name[:nameLen-1]
 }
 
-func performRequest(name string) models.Movie {
+// Performs an HTTP request to find a movie with the title provided by the user
+func findMovie(name string) models.Movie {
 	movie := models.Movie{}
 
 	queryURL := baseURL + "t=" + name
@@ -79,4 +78,35 @@ func performRequest(name string) models.Movie {
 		json.Unmarshal(content, &movie)
 	}
 	return movie
+}
+
+// Performs an HTTP request to find a TV show with the title provided by the user
+func findShow(name string) models.Show {
+	show := models.Show{}
+
+	queryURL := baseURL + "t=" + name + "&type=series"
+	res, err := http.Get(queryURL)
+	if err != nil {
+		fmt.Printf("%s", err)
+		os.Exit(1)
+	} else {
+		defer res.Body.Close()
+		content, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			fmt.Printf("%s", err)
+			os.Exit(1)
+		}
+
+		json.Unmarshal(content, &show)
+	}
+	return show
+}
+
+// Prints the list of accepted commands
+func printHelp() {
+	fmt.Println("Available commands:")
+	fmt.Println("* -h | -help: Prints the list of available commands")
+	fmt.Println("* -m | -movie `movie title`: Search for a movie (e.g. go-movie-lookup -m Avengers)")
+	fmt.Println("* -s | -show `show title`: Search for a TV show (e.g. go-movie-lookup -s Game of Thrones)")
+	fmt.Println("You can also search for a TV show season (e.g. go-movie-lookup -s Game of Thrones S3) or a TV show episode (e.g. go-movie-lookup -s Game of Thrones S3E5)")
 }
