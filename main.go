@@ -8,7 +8,7 @@ import (
 	"os"
 	"regexp"
 
-	"./models"
+	"go-movielookup/models"
 )
 
 var apiKey = "a5fafd94"
@@ -27,11 +27,11 @@ func main() {
 	cmd := args[1]
 
 	switch cmd {
-	case "-m", "-movie":
+	case "-m", "--movie":
 		cmdArgs := buildString(args[2:])
 		mov := findMovie(cmdArgs)
 		mov.PrintMovie()
-	case "-s", "-show":
+	case "-s", "--show":
 		lastArg := args[len(args)-1]
 		nextToLastArg := args[len(args)-2]
 
@@ -75,7 +75,9 @@ func main() {
 				show.PrintShow()
 			}
 		}
-	case "-h", "-help":
+	case "-h", "--help":
+		printHelp()
+	default:
 		printHelp()
 	}
 }
@@ -193,8 +195,8 @@ func findSeason(title, seasonNumber string) models.Season {
 func printHelp() {
 	fmt.Println("Movie and TV Show Lookup")
 	fmt.Println("Available commands:")
-	fmt.Println("* -h | -help: Prints the list of available commands")
-	fmt.Println("* -m | -movie `movie title`: Search for a movie (e.g. go-movie-lookup -m Avengers)")
-	fmt.Println("* -s | -show `show title`: Search for a TV show (e.g. go-movie-lookup -s Game of Thrones)")
+	fmt.Println("* -h | --help: Prints the list of available commands")
+	fmt.Println("* -m | --movie `movie title`: Search for a movie (e.g. go-movie-lookup -m Avengers)")
+	fmt.Println("* -s | --show `show title`: Search for a TV show (e.g. go-movie-lookup -s Game of Thrones)")
 	fmt.Println("You can also search for a TV show season (e.g. go-movie-lookup -s Game of Thrones S3) or a TV show episode (e.g. go-movie-lookup -s Game of Thrones S3 E5)")
 }
