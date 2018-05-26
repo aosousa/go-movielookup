@@ -4,7 +4,7 @@ package models
 // from the OMDB API to use in the season struct
 type BasicEpisode struct {
 	Title    string
-	Number   int
+	Episode  string
 	Released string
-	Rating   string
+	Rating   string `json:"imdbRating"`
 }
