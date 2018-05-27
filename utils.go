@@ -11,29 +11,35 @@ import (
 	"go-movielookup/models"
 )
 
-// var apiKey = "a5fafd94"
-// var baseURL = "http://www.omdbapi.com/?apikey=" + apiKey + "&"
-var version = "0.1.0"
+var apiKey = "a5fafd94"
+var baseURL = "http://www.omdbapi.com/?apikey=" + apiKey + "&"
+var version = "0.2.0"
 
 // Handles a request to lookup a movie with the title provided by the user
 // Receives:
 // * args ([]string) - Arguments passed in the terminal by the user
 func handleMovie(args []string) {
-	cmdArgs := buildTitleString(args[2:])
-	movie := findMovie(cmdArgs)
-	movie.PrintMovie()
-}
+	var queryURL string
+	apiError := models.Error{}
 
-// Performs an HTTP request to find a movie with the title provided by the user
-// Receives:
-// * name (string) - Name of the movie
-func findMovie(name string) models.Movie {
-	movie := models.Movie{}
+	lastArg := args[len(args)-1]
+	yearRegex, _ := regexp.Compile(`\([0-9]+\)`)
+	yearRegexArg := yearRegex.FindStringSubmatch(lastArg)
 
-	queryURL := baseURL + "t=" + name
+	// if year was not sent in the command line arguments, perform normal movie query
+	// if it was, add year to the query URL
+	if len(yearRegexArg) == 0 {
+		movieTitle := buildTitleString(args[2:])
+		queryURL = baseURL + "t=" + movieTitle + "&type=movie"
+	} else {
+		// build title string but remove year argument
+		movieTitle := buildTitleString(args[2 : len(args)-1])
+		queryURL = baseURL + "t=" + movieTitle + "&type=movie&y=" + yearRegexArg[0][1:5]
+	}
+
 	res, err := http.Get(queryURL)
 	if err != nil {
-		fmt.Println("%s", err)
+		fmt.Printf("%s", err)
 		os.Exit(1)
 	}
 	defer res.Body.Close()
@@ -44,9 +50,16 @@ func findMovie(name string) models.Movie {
 		os.Exit(1)
 	}
 
-	json.Unmarshal(content, &movie)
-
-	return movie
+	// if no error occurred, print the movie information
+	// else, print error message sent in the API
+	json.Unmarshal(content, &apiError)
+	if apiError.Response == "True" {
+		movie := models.Movie{}
+		json.Unmarshal(content, &movie)
+		movie.PrintMovie()
+	} else {
+		apiError.PrintError()
+	}
 }
 
 // Handles a request to lookup a TV show, TV show season, or TV show episode
@@ -122,9 +135,10 @@ func findShow(args []string) {
 // * seasonNum (string) - Season number
 func findSeason(args []string, seasonNum string) {
 	season := models.Season{}
-	showTitle := buildTitleString(args[2 : len(args)-2])
+	showTitle := buildTitleString(args[2 : len(args)-1])
 
 	queryURL := baseURL + "t=" + showTitle + "&type=series&season=" + seasonNum
+	fmt.Println(queryURL)
 
 	res, err := http.Get(queryURL)
 	if err != nil {
@@ -192,11 +206,13 @@ func buildTitleString(args []string) string {
 func printHelp() {
 	fmt.Println("Movie and TV Show Lookup (version " + version + ")")
 	fmt.Println("Available commands:")
-	fmt.Println("* -h | --help: Prints the list of available commands")
-	fmt.Println("* -v | --version: Prints the version of the program")
-	fmt.Println("* -m | --movie `movie title`: Search for a movie (e.g. go-movie-lookup -m Avengers)")
-	fmt.Println("* -s | --show `show title`: Search for a TV show (e.g. go-movie-lookup -s Game of Thrones)")
-	fmt.Println("You can also search for a TV show season (e.g. go-movie-lookup -s Game of Thrones S3) or a TV show episode (e.g. go-movie-lookup -s Game of Thrones S3 E9)")
+	fmt.Println("\t* -h | --help: Prints the list of available commands")
+	fmt.Println("\t* -v | --version: Prints the version of the program")
+	fmt.Println("\t* -m | --movie `movie title`: Search for a movie (e.g. go-movie-lookup -m Avengers)")
+	fmt.Println("\t\tIn case you want the movie from a specific year, you can add the year in front of the movie title (e.g. go-movie-lookup -m Ghostbusters (1984)")
+	fmt.Println("\t* -s | --show `show title`: Search for a TV show (e.g. go-movie-lookup -s Game of Thrones)")
+	fmt.Println("\t\tYou can also search for a TV show season (e.g. go-movie-lookup -s Game of Thrones S3) or a TV show episode (e.g. go-movie-lookup -s Game of Thrones S3 E9)")
+	fmt.Println("\t\tIn case you want the TV show from a specific year, you can add the year in front of the show title (e.g. go-movie-lookup -s House of Cards (1990)")
 }
 
 // Prints the version of the program
@@ -207,5 +223,5 @@ func printVersion() {
 // Prints an error stating the correct format to look up for a TV show episode
 func printShowFormatError() {
 	fmt.Println("Error: The correct format to look up for a TV show episode is:")
-	fmt.Println("go-movielookup -s (Show title) S(number) E(number) (e.g. go-movielookup -s Game of Thrones S3 E9")
+	fmt.Println("go-movielookup -s (Show title) S(number) E(number) (e.g. go-movielookup -s Game of Thrones S3 E9)")
 }

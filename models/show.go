@@ -35,9 +35,14 @@ func (s Show) PrintShow() {
 	fmt.Println("Language:", s.Language)
 	fmt.Println("Awards:", s.Awards)
 	fmt.Println("Number of Seasons:", s.Seasons)
-	fmt.Println("Ratings:")
-	for i := range s.Ratings {
-		rating := "* " + s.Ratings[i].Source + ": " + s.Ratings[i].Value
-		fmt.Println(rating)
+
+	if len(s.Ratings) > 0 {
+		fmt.Println("Ratings:")
+		for i := range s.Ratings {
+			rating := "* " + s.Ratings[i].Source + ": " + s.Ratings[i].Value
+			fmt.Println(rating)
+		}
+	} else {
+		fmt.Println("Ratings: N/A")
 	}
 }

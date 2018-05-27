@@ -36,9 +36,14 @@ func (m Movie) PrintMovie() {
 	fmt.Println("Language:", m.Language)
 	fmt.Println("Awards:", m.Awards)
 	fmt.Println("Production:", m.Production)
-	fmt.Println("Ratings:")
-	for i := range m.Ratings {
-		rating := "* " + m.Ratings[i].Source + ": " + m.Ratings[i].Value
-		fmt.Println(rating)
+
+	if len(m.Ratings) > 0 {
+		fmt.Println("Ratings:")
+		for i := range m.Ratings {
+			rating := "* " + m.Ratings[i].Source + ": " + m.Ratings[i].Value
+			fmt.Println(rating)
+		}
+	} else {
+		fmt.Println("Ratings: N/A")
 	}
 }

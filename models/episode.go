@@ -31,9 +31,14 @@ func (e Episode) PrintEpisode() {
 	fmt.Println("Writer:", e.Writer)
 	fmt.Println("Plot:", e.Plot)
 	fmt.Println("Language:", e.Language)
-	fmt.Println("Ratings:")
-	for i := range e.Ratings {
-		rating := "* " + e.Ratings[i].Source + ": " + e.Ratings[i].Value
-		fmt.Println(rating)
+
+	if len(e.Ratings) > 0 {
+		fmt.Println("Ratings:")
+		for i := range e.Ratings {
+			rating := "* " + e.Ratings[i].Source + ": " + e.Ratings[i].Value
+			fmt.Println(rating)
+		}
+	} else {
+		fmt.Println("Ratings: N/A")
 	}
 }

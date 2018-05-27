@@ -4,9 +4,6 @@ import (
 	"os"
 )
 
-var apiKey = "a5fafd94"
-var baseURL = "http://www.omdbapi.com/?apikey=" + apiKey + "&"
-
 func main() {
 	// return help message if length of command line arguments is 1
 	// we pick 1 instead of 0 because it'll never be 0
