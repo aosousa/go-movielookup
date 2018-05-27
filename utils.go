@@ -206,13 +206,13 @@ func buildTitleString(args []string) string {
 func printHelp() {
 	fmt.Println("Movie and TV Show Lookup (version " + version + ")")
 	fmt.Println("Available commands:")
-	fmt.Println("\t* -h | --help: Prints the list of available commands")
-	fmt.Println("\t* -v | --version: Prints the version of the program")
-	fmt.Println("\t* -m | --movie `movie title`: Search for a movie (e.g. go-movie-lookup -m Avengers)")
-	fmt.Println("\t\tIn case you want the movie from a specific year, you can add the year in front of the movie title (e.g. go-movie-lookup -m Ghostbusters (1984)")
-	fmt.Println("\t* -s | --show `show title`: Search for a TV show (e.g. go-movie-lookup -s Game of Thrones)")
-	fmt.Println("\t\tYou can also search for a TV show season (e.g. go-movie-lookup -s Game of Thrones S3) or a TV show episode (e.g. go-movie-lookup -s Game of Thrones S3 E9)")
-	fmt.Println("\t\tIn case you want the TV show from a specific year, you can add the year in front of the show title (e.g. go-movie-lookup -s House of Cards (1990)")
+	fmt.Println("* -h | --help    Prints the list of available commands")
+	fmt.Println("* -v | --version Prints the version of the program")
+	fmt.Println("\n* -m | --movie `movie title` [(YEAR)] Search for a movie (e.g. go-movie-lookup -m Avengers)")
+	fmt.Println("In case you want the movie from a specific year, you can add the year in front of the movie title (e.g. go-movie-lookup -m Ghostbusters (1984)")
+	fmt.Println("\n* -s | --show `show title` [S1 | S1 E1] Search for a TV show (e.g. go-movie-lookup -s Game of Thrones)")
+	fmt.Println("You can also search for a TV show season (e.g. go-movie-lookup -s Game of Thrones S3) or a TV show episode (e.g. go-movie-lookup -s Game of Thrones S3 E9)")
+	fmt.Println("In case you want the TV show from a specific year, you can add the year in front of the show title (e.g. go-movie-lookup -s House of Cards (1990)")
 }
 
 // Prints the version of the program
