@@ -107,10 +107,24 @@ func handleShowOptions(args []string) {
 
 // Handles a request to lookup a TV show
 func findShow(args []string) {
+	var queryURL string
 	show := models.Show{}
-	showTitle := buildTitleString(args[2:])
 
-	queryURL := baseURL + "t=" + showTitle + "&type=series"
+	lastArg := args[len(args)-1]
+	yearRegex, _ := regexp.Compile(`\([0-9]+\)`)
+	yearRegexArg := yearRegex.FindStringSubmatch(lastArg)
+
+	// if year was not sent in the command line arguments, perform normal show query
+	// if it was, add year to the query URL
+	if len(yearRegexArg) == 0 {
+		showTitle := buildTitleString(args[2:])
+		queryURL = baseURL + "t=" + showTitle + "&type=series"
+	} else {
+		// build title string but remove year argument
+		movieTitle := buildTitleString(args[2 : len(args)-1])
+		queryURL = baseURL + "t=" + movieTitle + "&type=series&y=" + yearRegexArg[0][1:5]
+	}
+
 	res, err := http.Get(queryURL)
 	if err != nil {
 		fmt.Printf("%s", err)
@@ -134,11 +148,25 @@ func findShow(args []string) {
 // * args ([]string) - Arguments passed in the terminal by the user
 // * seasonNum (string) - Season number
 func findSeason(args []string, seasonNum string) {
+	var queryURL string
 	season := models.Season{}
-	showTitle := buildTitleString(args[2 : len(args)-1])
 
-	queryURL := baseURL + "t=" + showTitle + "&type=series&season=" + seasonNum
-	fmt.Println(queryURL)
+	// next to last argument here because the last argument is the season number
+	lastArg := args[len(args)-2]
+	yearRegex, _ := regexp.Compile(`\([0-9]+\)`)
+	yearRegexArg := yearRegex.FindStringSubmatch(lastArg)
+
+	// if year was not sent in the command line arguments, perform normal season query
+	// if it was, add year to the query URL
+	if len(yearRegexArg) == 0 {
+		// build title string but remove season number (last argument)
+		showTitle := buildTitleString(args[2 : len(args)-1])
+		queryURL = baseURL + "t=" + showTitle + "&type=series&season=" + seasonNum
+	} else {
+		// build title string but remove season number AND year (last 2 arguments)
+		showTitle := buildTitleString(args[2 : len(args)-2])
+		queryURL = baseURL + "t=" + showTitle + "&type=series&season=" + seasonNum + "&y=" + yearRegexArg[0][1:5]
+	}
 
 	res, err := http.Get(queryURL)
 	if err != nil {
@@ -164,10 +192,28 @@ func findSeason(args []string, seasonNum string) {
 // * season (string) - Season number
 // * episodeNum (string) - Episode number
 func findEpisode(args []string, season string, episodeNum string) {
+	var queryURL string
 	episode := models.Episode{}
-	showTitle := buildTitleString(args[2 : len(args)-2])
 
-	queryURL := baseURL + "t=" + showTitle + "&type=series&season=" + season + "&episode=" + episodeNum
+	// next to next to last argument here since the last 2 arguments are season and episode number
+	lastArg := args[len(args)-3]
+	yearRegex, _ := regexp.Compile(`\([0-9]+\)`)
+	yearRegexArg := yearRegex.FindStringSubmatch(lastArg)
+
+	fmt.Println(len(yearRegexArg))
+
+	// if year was not sent in the command line arguments, perform normal episode query
+	// if it was, add year to the query URL
+
+	if len(yearRegexArg) == 0 {
+		// build title string but remove season and episode numbers (last 2 arguments)
+		showTitle := buildTitleString(args[2 : len(args)-2])
+		queryURL = baseURL + "t=" + showTitle + "&type=series&season=" + season + "&episode=" + episodeNum
+	} else {
+		// build title string but remove season, episode, AND year (last 3 arguments)
+		showTitle := buildTitleString(args[2 : len(args)-3])
+		queryURL = baseURL + "t=" + showTitle + "&type=series&season=" + season + "&episode=" + episodeNum + "&y=" + yearRegexArg[0][1:5]
+	}
 
 	res, err := http.Get(queryURL)
 	if err != nil {
