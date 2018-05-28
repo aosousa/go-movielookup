@@ -9,7 +9,7 @@ No installation required. Either download the executable separately, or run it a
 ### Usage
 
 ```
-gomovie-lookup.exe [-m | --movie | -s | --show | -h | --help | -v | --version]
+go-movielookup.exe [-m | --movie | -s | --show | -h | --help | -v | --version]
 ```
 
 ### Options
