@@ -108,7 +108,7 @@ func handleShowOptions(args []string) {
 // Handles a request to lookup a TV show
 func findShow(args []string) {
 	var queryURL string
-	show := models.Show{}
+	apiError := models.Error{}
 
 	lastArg := args[len(args)-1]
 	yearRegex, _ := regexp.Compile(`\([0-9]+\)`)
@@ -138,9 +138,16 @@ func findShow(args []string) {
 		os.Exit(1)
 	}
 
-	json.Unmarshal(content, &show)
-
-	show.PrintShow()
+	// if no error occurred, print show information
+	// else, print error message sent in the APi
+	json.Unmarshal(content, &apiError)
+	if apiError.Response == "True" {
+		show := models.Show{}
+		json.Unmarshal(content, &show)
+		show.PrintShow()
+	} else {
+		apiError.PrintError()
+	}
 }
 
 // Handles a request to lookup a TV show season
@@ -149,7 +156,7 @@ func findShow(args []string) {
 // * seasonNum (string) - Season number
 func findSeason(args []string, seasonNum string) {
 	var queryURL string
-	season := models.Season{}
+	apiError := models.Error{}
 
 	// next to last argument here because the last argument is the season number
 	lastArg := args[len(args)-2]
@@ -181,9 +188,16 @@ func findSeason(args []string, seasonNum string) {
 		os.Exit(1)
 	}
 
-	json.Unmarshal(content, &season)
-
-	season.PrintSeason()
+	// if no error occurred, print season information
+	// else, print error message sent in the API
+	json.Unmarshal(content, &apiError)
+	if apiError.Response == "True" {
+		season := models.Season{}
+		json.Unmarshal(content, &season)
+		season.PrintSeason()
+	} else {
+		apiError.PrintError()
+	}
 }
 
 // Handles a request to lookup a TV show episode
@@ -193,14 +207,12 @@ func findSeason(args []string, seasonNum string) {
 // * episodeNum (string) - Episode number
 func findEpisode(args []string, season string, episodeNum string) {
 	var queryURL string
-	episode := models.Episode{}
+	apiError := models.Error{}
 
 	// next to next to last argument here since the last 2 arguments are season and episode number
 	lastArg := args[len(args)-3]
 	yearRegex, _ := regexp.Compile(`\([0-9]+\)`)
 	yearRegexArg := yearRegex.FindStringSubmatch(lastArg)
-
-	fmt.Println(len(yearRegexArg))
 
 	// if year was not sent in the command line arguments, perform normal episode query
 	// if it was, add year to the query URL
@@ -228,9 +240,16 @@ func findEpisode(args []string, season string, episodeNum string) {
 		os.Exit(1)
 	}
 
-	json.Unmarshal(content, &episode)
-
-	episode.PrintEpisode()
+	// if no error occurred, print episode information
+	// else, print error message sent in the API
+	json.Unmarshal(content, &apiError)
+	if apiError.Response == "True" {
+		episode := models.Episode{}
+		json.Unmarshal(content, &episode)
+		episode.PrintEpisode()
+	} else {
+		apiError.PrintError()
+	}
 }
 
 // Builds a string that can be used in the API request in case the movie or show title has more than one word
