@@ -13,7 +13,7 @@ import (
 
 var apiKey = "a5fafd94"
 var baseURL = "http://www.omdbapi.com/?apikey=" + apiKey + "&"
-var version = "0.2.0"
+var version = "1.0.0"
 
 // Handles a request to lookup a movie with the title provided by the user
 // Receives:
@@ -38,6 +38,8 @@ func handleMovie(args []string) {
 	}
 
 	res, err := http.Get(queryURL)
+	checkResponse(res.StatusCode)
+
 	if err != nil {
 		fmt.Printf("%s", err)
 		os.Exit(1)
@@ -126,6 +128,8 @@ func findShow(args []string) {
 	}
 
 	res, err := http.Get(queryURL)
+	checkResponse(res.StatusCode)
+
 	if err != nil {
 		fmt.Printf("%s", err)
 		os.Exit(1)
@@ -156,6 +160,7 @@ func findShow(args []string) {
 // * seasonNum (string) - Season number
 func findSeason(args []string, seasonNum string) {
 	var queryURL string
+	var year string
 	apiError := models.Error{}
 
 	// next to last argument here because the last argument is the season number
@@ -166,16 +171,21 @@ func findSeason(args []string, seasonNum string) {
 	// if year was not sent in the command line arguments, perform normal season query
 	// if it was, add year to the query URL
 	if len(yearRegexArg) == 0 {
+		year = ""
+
 		// build title string but remove season number (last argument)
 		showTitle := buildTitleString(args[2 : len(args)-1])
 		queryURL = baseURL + "t=" + showTitle + "&type=series&season=" + seasonNum
 	} else {
 		// build title string but remove season number AND year (last 2 arguments)
+		year = yearRegexArg[0][1:5]
 		showTitle := buildTitleString(args[2 : len(args)-2])
-		queryURL = baseURL + "t=" + showTitle + "&type=series&season=" + seasonNum + "&y=" + yearRegexArg[0][1:5]
+		queryURL = baseURL + "t=" + showTitle + "&type=series&season=" + seasonNum + "&y=" + year
 	}
 
 	res, err := http.Get(queryURL)
+	checkResponse(res.StatusCode)
+
 	if err != nil {
 		fmt.Printf("%s", err)
 		os.Exit(1)
@@ -194,7 +204,7 @@ func findSeason(args []string, seasonNum string) {
 	if apiError.Response == "True" {
 		season := models.Season{}
 		json.Unmarshal(content, &season)
-		season.PrintSeason()
+		season.PrintSeason(year)
 	} else {
 		apiError.PrintError()
 	}
@@ -228,6 +238,8 @@ func findEpisode(args []string, season string, episodeNum string) {
 	}
 
 	res, err := http.Get(queryURL)
+	checkResponse(res.StatusCode)
+
 	if err != nil {
 		fmt.Printf("%s", err)
 		os.Exit(1)
@@ -289,4 +301,14 @@ func printVersion() {
 func printShowFormatError() {
 	fmt.Println("Error: The correct format to look up for a TV show episode is:")
 	fmt.Println("go-movielookup -s (Show title) S(number) E(number) (e.g. go-movielookup -s Game of Thrones S3 E9)")
+}
+
+// Check if there was an error with the API
+// Receives:
+// * code (int) - Response status code
+func checkResponse(code int) {
+	if code != 200 {
+		fmt.Println("Error: An error occurred while performing your request. Please try again later.")
+		os.Exit(1)
+	}
 }
