@@ -76,4 +76,4 @@ In case you want the TV show from a specific year, you can add the year in front
 
 ### Contribute
 
-Found a bug? Have a feature you'd like to see added or something you'd like to see improved? Do so by [opening a new issue](https://github.com/aosousa/go-movielookup/issues)!
+Found a bug? Have a feature you'd like to see added or something you'd like to see improved? You can do so by [opening a new issue](https://github.com/aosousa/go-movielookup/issues)!
