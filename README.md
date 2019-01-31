@@ -2,9 +2,15 @@
 
 **Golang CMD Utility Tool to look up movie or TV show information using the OMDB API.**
 
-No installation required. Either download the executable separately, or clone the entire repository through the following command:
+### Installation
+Download the executable in the [Releases tab](https://github.com/aosousa/go-movielookup/releases).
 
-`$ git clone https://github.com/aosousa/go-movielookup.git`
+This tool requires a `config.json` file present in the same directory as the executable, with the following structure:
+```json
+{
+    "apiKey": "<your-OMDB-API-key>"
+}
+```
 
 ### Usage
 

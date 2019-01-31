@@ -11,9 +11,18 @@ import (
 	"go-movielookup/models"
 )
 
-var apiKey = "a5fafd94"
-var baseURL = "http://www.omdbapi.com/?apikey=" + apiKey + "&"
-var version = "1.0.0"
+const version = "1.1.0"
+
+var (
+	baseURL string
+	config  models.Config
+)
+
+// Read configuration file and parse that information into a Config struct
+func initConfig() {
+	config = models.CreateConfig()
+	baseURL = "http://www.omdbapi.com/?apikey=" + config.APIKey + "&"
+}
 
 // Handles a request to lookup a movie with the title provided by the user
 // Receives:
