@@ -9,7 +9,7 @@ import (
 type Season struct {
 	Title    string
 	Season   string
-	Episodes []BasicEpisode
+	Episodes BasicEpisodes
 }
 
 // PrintSeason takes the information stored in a Season struct and prints it out to the user
@@ -27,13 +27,12 @@ func (s Season) PrintSeason(year string) {
 
 	fmt.Println(titleString)
 	fmt.Println("Episodes:")
-	for i := range s.Episodes {
-		rating, _ := strconv.ParseFloat(s.Episodes[i].Rating, 64)
+	for _, episode := range s.Episodes {
+		rating, _ := strconv.ParseFloat(episode.Rating, 64)
 		avgRating += rating
 
-		episode := "* Episode " + s.Episodes[i].Episode + ": " + s.Episodes[i].Title + " - " + s.Episodes[i].Rating + " IMDB rating"
-		fmt.Println(episode)
+		fmt.Printf("* Episode %s: %s - %.1f IMDB rating\n", episode.Episode, episode.Title, rating)
 	}
 	avgRating = avgRating / float64(len(s.Episodes))
-	fmt.Printf("Average Episode IMDB Rating: %.1f", avgRating)
+	fmt.Printf("Average Episode IMDB Rating: %.1f\n", avgRating)
 }

@@ -8,3 +8,6 @@ type BasicEpisode struct {
 	Released string
 	Rating   string `json:"imdbRating"`
 }
+
+// BasicEpisodes represents a slice of BasicEpisode structs
+type BasicEpisodes []BasicEpisode
