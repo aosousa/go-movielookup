@@ -1,6 +1,6 @@
 # go-movielookup
 
-**Golang CMD Utility Tool to look up movie or TV show information using the OMDB API.**
+**Golang application to look up movie or TV show information using the OMDB API.**
 
 ### Installation
 Download the executable in the [Releases tab](https://github.com/aosousa/go-movielookup/releases).
@@ -13,6 +13,8 @@ This tool requires a `config.json` file present in the same directory as the exe
 ```
 
 ### Usage
+
+Usage and examples shown are for usage on Windows operating systems. Replace `go-movielookup.exe` with `go-movielookup-linux` if running on a Linux distribution, or `go-movielookup-macos` if running on MacOS.
 
 ```
 go-movielookup.exe [-m | --movie | -s | --show | -h | --help | -v | --version]
