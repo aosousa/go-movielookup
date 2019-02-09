@@ -14,8 +14,6 @@ This tool requires a `config.json` file present in the same directory as the exe
 
 ### Usage
 
-Usage and examples shown are for usage on Windows operating systems. Replace `go-movielookup.exe` with `go-movielookup-linux` if running on a Linux distribution, or `go-movielookup-macos` if running on MacOS.
-
 ```
 go-movielookup.exe [-m | --movie | -s | --show | -h | --help | -v | --version]
 ```
