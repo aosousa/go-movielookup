@@ -18,16 +18,17 @@ var (
 	config  models.Config
 )
 
-// Read configuration file and parse that information into a Config struct
-func initConfig() {
+// InitConfig reads the configuration file and parses that information into a Config struct
+func InitConfig() {
 	config = models.CreateConfig()
 	baseURL = "http://www.omdbapi.com/?apikey=" + config.APIKey + "&"
 }
 
-// Handles a request to lookup a movie with the title provided by the user
-// Receives:
-// * args ([]string) - Arguments passed in the terminal by the user
-func handleMovie(args []string) {
+/*HandleMovie handles a request to lookup a movie with the title provided by the user
+ * Receives:
+ * args ([]string) - Arguments passed in the terminal by the user
+ */
+func HandleMovie(args []string) {
 	var queryURL string
 	apiError := models.Error{}
 
@@ -73,10 +74,11 @@ func handleMovie(args []string) {
 	}
 }
 
-// Handles a request to lookup a TV show, TV show season, or TV show episode
-// Receives:
-// * args ([]string) - Arguments passed in the terminal by the user
-func handleShowOptions(args []string) {
+/*HandleShowOptions handles a request to lookup a TV show, TV show season, or TV show episode
+ * Receives:
+ * args ([]string) - Arguments passed in the terminal by the user
+ */
+func HandleShowOptions(args []string) {
 	lastArg := args[len(args)-1]
 	nextToLastArg := args[len(args)-2]
 
@@ -288,8 +290,8 @@ func buildTitleString(args []string) string {
 	return name[:nameLen-1]
 }
 
-// Prints the list of accepted commands
-func printHelp() {
+// PrintHelp prints the list of accepted commands
+func PrintHelp() {
 	fmt.Println("Movie and TV Show Lookup (version " + version + ")")
 	fmt.Println("Available commands:")
 	fmt.Println("* -h | --help    Prints the list of available commands")
@@ -301,8 +303,8 @@ func printHelp() {
 	fmt.Println("In case you want the TV show from a specific year, you can add the year in front of the show title (e.g. go-movie-lookup -s House of Cards (1990)")
 }
 
-// Prints the version of the program
-func printVersion() {
+// PrintVersion prints the version of the program
+func PrintVersion() {
 	fmt.Println("Version " + version)
 }
 
