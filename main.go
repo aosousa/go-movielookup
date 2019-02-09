@@ -2,18 +2,20 @@ package main
 
 import (
 	"os"
+
+	"github.com/aosousa/go-movielookup/utils"
 )
 
 func main() {
 	// set up Config struct
-	initConfig()
+	utils.initConfig()
 
 	// return help message if length of command line arguments is 1
 	// we pick 1 instead of 0 because it'll never be 0
 	// since os.Args[0] returns the name of the file being executed (in this case, go-movie-lookup.exe)
 	args := os.Args
 	if len(args) == 1 {
-		printHelp()
+		utils.printHelp()
 		return
 	}
 
@@ -21,14 +23,14 @@ func main() {
 
 	switch cmd {
 	case "-m", "--movie":
-		handleMovie(args)
+		utils.handleMovie(args)
 	case "-s", "--show":
-		handleShowOptions(args)
+		utils.handleShowOptions(args)
 	case "-h", "--help":
-		printHelp()
+		utils.printHelp()
 	case "-v", "--version":
-		printVersion()
+		utils.printVersion()
 	default:
-		printHelp()
+		utils.printHelp()
 	}
 }
