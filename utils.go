@@ -8,7 +8,7 @@ import (
 	"os"
 	"regexp"
 
-	"go-movielookup/models"
+	"github.com/aosousa/go-movielookup/models"
 )
 
 const version = "1.2.0"
