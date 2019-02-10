@@ -11,7 +11,7 @@ import (
 	"github.com/aosousa/go-movielookup/models"
 )
 
-const version = "1.2.0"
+const version = "1.2.1"
 
 var (
 	baseURL string
@@ -83,13 +83,13 @@ func HandleShowOptions(args []string) {
 	nextToLastArg := args[len(args)-2]
 
 	// get last cmd line argument to check if episode argument was sent
-	episodeRegex, _ := regexp.Compile("E([0-9]+)")
+	episodeRegex, _ := regexp.Compile("(?i)E([0-9]+)")
 	episodeRegexArgs := episodeRegex.FindStringSubmatch(lastArg)
 
 	// if episode argument was found, check for a season argument
 	// else, check for a season argument again but to print only season information
 	if len(episodeRegexArgs) > 0 {
-		seasonRegex, _ := regexp.Compile("S([0-9]+)")
+		seasonRegex, _ := regexp.Compile("(?i)S([0-9]+)")
 		seasonRegexArgs := seasonRegex.FindStringSubmatch(nextToLastArg)
 
 		// if season was found, print season information
@@ -103,7 +103,7 @@ func HandleShowOptions(args []string) {
 			printShowFormatError()
 		}
 	} else {
-		seasonRegex, _ := regexp.Compile("S([0-9]+)")
+		seasonRegex, _ := regexp.Compile("(?i)S([0-9]+)")
 		seasonRegexArgs := seasonRegex.FindStringSubmatch(lastArg)
 
 		// if season was found, print season information
