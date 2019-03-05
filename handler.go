@@ -1,14 +1,13 @@
-package utils
+package main
 
 import (
 	"encoding/json"
 	"fmt"
+	"go-movielookup/models"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"regexp"
-
-	"github.com/aosousa/go-movielookup/models"
 )
 
 const version = "1.3.0"
@@ -19,7 +18,7 @@ var (
 )
 
 // InitConfig reads the configuration file and parses that information into a Config struct
-func InitConfig() {
+func initConfig() {
 	config = models.CreateConfig()
 	baseURL = "http://www.omdbapi.com/?apikey=" + config.APIKey + "&"
 }
@@ -28,7 +27,7 @@ func InitConfig() {
  * Receives:
  * args ([]string) - Arguments passed in the terminal by the user
  */
-func HandleMovie(args []string) {
+func handleMovie(args []string) {
 	var queryURL string
 	apiError := models.Error{}
 
@@ -78,7 +77,7 @@ func HandleMovie(args []string) {
  * Receives:
  * args ([]string) - Arguments passed in the terminal by the user
  */
-func HandleShowOptions(args []string) {
+func handleShowOptions(args []string) {
 	lastArg := args[len(args)-1]
 	nextToLastArg := args[len(args)-2]
 
@@ -291,7 +290,7 @@ func buildTitleString(args []string) string {
 }
 
 // PrintHelp prints the list of accepted commands
-func PrintHelp() {
+func printHelp() {
 	fmt.Println("Movie and TV Show Lookup (version " + version + ")")
 	fmt.Println("Available commands:")
 	fmt.Println("* -h | --help    Prints the list of available commands")
@@ -304,7 +303,7 @@ func PrintHelp() {
 }
 
 // PrintVersion prints the version of the program
-func PrintVersion() {
+func printVersion() {
 	fmt.Println("Version " + version)
 }
 
