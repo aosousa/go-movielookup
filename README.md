@@ -5,12 +5,26 @@
 ### Installation
 Download the executable in the [Releases tab](https://github.com/aosousa/go-movielookup/releases).
 
-This tool requires a `config.json` file present in the same directory as the executable, with the following structure:
+This tool requires an OMDB API key. You can set it in 2 ways:
+
+#### Configuration file
+
+A `config.json` file present in the same directory as the executable, with the following structure:
 ```json
 {
     "apiKey": "<your-OMDB-API-key>"
 }
 ```
+
+#### Environment variable
+
+Configure your OMDB API key as an environment variable.
+```sh
+echo 'export OMDB_KEY="<apiKey>"' >> <terminalFile>
+```
+
+Regarding the `<terminalFile>`, it depends on your terminal. If you're using
+bash, change it for `~/.bashrc`, as for zsh, you can change for `~/.zshenv`.
 
 ### Usage
 

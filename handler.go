@@ -3,11 +3,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"go-movielookup/models"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"regexp"
+
+	"github.com/aosousa/go-movielookup/models"
 )
 
 const version = "1.3.0"

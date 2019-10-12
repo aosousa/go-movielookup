@@ -2,9 +2,11 @@ package models
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
 	"io/ioutil"
 	"os"
+
+	utils "github.com/aosousa/golang-utils"
 )
 
 // Config struct contains all the necessary configurations for the app
@@ -16,16 +18,24 @@ type Config struct {
 // CreateConfig adds information to a Config struct
 func CreateConfig() Config {
 	var config Config
-	jsonFile, err := ioutil.ReadFile("./config.json")
-	if err != nil {
-		fmt.Printf("%s", err)
-		os.Exit(1)
+
+	if _, err := os.Stat("./config.json"); err == nil {
+		jsonFile, err := ioutil.ReadFile("./config.json")
+		if err != nil {
+			utils.HandleError(err)
+		}
+
+		err = json.Unmarshal(jsonFile, &config)
+		if err != nil {
+			utils.HandleError(err)
+		}
 	}
 
-	err = json.Unmarshal(jsonFile, &config)
-	if err != nil {
-		fmt.Printf("%s", err)
-		os.Exit(1)
+	config.APIKey = os.Getenv("OMDB_KEY")
+
+	if config.APIKey == "" {
+		err := errors.New("ERROR: OMDB API key missing")
+		utils.HandleError(err)
 	}
 
 	return config
